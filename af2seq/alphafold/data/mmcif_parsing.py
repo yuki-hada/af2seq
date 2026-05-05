@@ -21,7 +21,11 @@ from typing import Any, Mapping, Optional, Sequence, Tuple
 
 from absl import logging
 from Bio import PDB
-from Bio.Data import SCOPData
+from Bio.Data import IUPACData as _IUPACData
+# SCOPData was removed in BioPython >= 1.80; reconstruct the uppercase mapping
+class SCOPData:
+    protein_letters_3to1 = {k.upper(): v
+                            for k, v in _IUPACData.protein_letters_3to1.items()}
 
 # Type aliases:
 ChainId = str
