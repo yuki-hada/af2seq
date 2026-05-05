@@ -229,7 +229,7 @@ class Design:
         else:
             raise ValueError(f"No valid mode: {modeltype}")
 
-        model_params = jax.tree_map(lambda *m: jnp.stack(m, axis=0), *all_params)
+        model_params = jax.tree.map(lambda *m: jnp.stack(m, axis=0), *all_params)
 
         return model_config, single_params, model_params
 
@@ -544,7 +544,7 @@ class Design:
 
         loss = jnp.mean(loss)
 
-        design_losses = jax.tree_map(lambda x: jnp.mean(x), result['design_loss'])
+        design_losses = jax.tree.map(lambda x: jnp.mean(x), result['design_loss'])
         for key, value in design_losses.items():
             if self.loss_track.get(key) is None:
                 self.loss_track[key] = [float(value)]
@@ -556,7 +556,7 @@ class Design:
         mean_plddt = jnp.mean(plddt, -1)
 
         highest_confidence = mean_plddt.argmax()
-        highest_confidence_result = jax.tree_map(lambda x: x[highest_confidence], result)
+        highest_confidence_result = jax.tree.map(lambda x: x[highest_confidence], result)
 
         ptms = []
         for logits, breaks in zip(result["predicted_aligned_error"]["logits"],
@@ -978,7 +978,7 @@ class MCMCDesign(Design):
                 pos = np.random.choice(pssm.shape[0], self.mcmc_muts)
                 # this only works for single mutations for now
                 for i in pos:
-                    if np.float(i) not in self.mcmc_mask:
+                    if float(i) not in self.mcmc_mask:
                         pos_loop = False
 
             if self.surf_optim:
@@ -1035,7 +1035,7 @@ class MCMCDesign(Design):
         }
 
         loss, result = model(target, feat, self.model_params)
-        result0 = jax.tree_map(lambda x: x[0], result)
+        result0 = jax.tree.map(lambda x: x[0], result)
         # Calculate TM-score and RMSD if it is a monomer design.
         if len(self.chains) == 1:
             TM_aligned_mean, RMSD_aligned_mean = extract_metrics(result, feat, self.target_file)

@@ -259,7 +259,7 @@ def extract_metrics(result, feat, target_file):
     RMSD_aligned_mean = []
 
     for i in range(len(result)):
-        result0 = jax.tree_map(lambda x: x[i], result)
+        result0 = jax.tree.map(lambda x: x[i], result)
         TM_aligned, RMSD_aligned = score_alignment(feat, result0, target_file)
         TM_aligned_mean.append(TM_aligned)
         RMSD_aligned_mean.append(RMSD_aligned)

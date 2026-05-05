@@ -329,12 +329,12 @@ class AlphaFold(hk.Module):
           start = recycle_idx * num_ensemble
           size = num_ensemble
           return jax.lax.dynamic_slice_in_dim(x, start, size, axis=0)
-        ensembled_batch = jax.tree_map(slice_recycle_idx, batch)
+        ensembled_batch = jax.tree.map(slice_recycle_idx, batch)
       else:
         num_ensemble = batch_size
         ensembled_batch = batch
 
-      non_ensembled_batch = jax.tree_map(lambda x: x, prev)
+      non_ensembled_batch = jax.tree.map(lambda x: x, prev)
 
       return impl(
           ensembled_batch=ensembled_batch,
@@ -1781,8 +1781,8 @@ class EmbeddingsAndEvoformer(hk.Module):
       rel_pos = jax.nn.one_hot(
           jnp.clip(
               offset + c.max_relative_feature,
-              a_min=0,
-              a_max=2 * c.max_relative_feature),
+              min=0,
+              max=2 * c.max_relative_feature),
           2 * c.max_relative_feature + 1)
       pair_activations += common_modules.Linear(
           c.pair_channel, name='pair_activiations')(

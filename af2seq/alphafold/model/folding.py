@@ -450,7 +450,7 @@ def generate_affines(representations, batch, config, global_config,
         aatype=batch['aatype'])
     outputs.append(output)
 
-  output = jax.tree_map(lambda *x: jnp.stack(x), *outputs)
+  output = jax.tree.map(lambda *x: jnp.stack(x), *outputs)
   # Include the activations in the output dict for use by the LDDT-Head.
   output['act'] = activations['act']
 
@@ -721,7 +721,7 @@ def compute_frames(
   alt_gt_frames = frames_batch['rigidgroups_alt_gt_frames']
   use_alt = use_alt[:, None]
 
-  renamed_gt_frames = jax.tree_map(
+  renamed_gt_frames = jax.tree.map(
       lambda x, y: (1. - use_alt) * x + use_alt * y, gt_frames, alt_gt_frames)
 
   return renamed_gt_frames, frames_batch['rigidgroups_gt_exists']
@@ -770,17 +770,17 @@ def sidechain_loss(batch, value, config):
   pred_frames = value['sidechains']['frames']
   pred_positions = value['sidechains']['atom_pos']
 
-  flat_gt_frames = jax.tree_map(jnp.ravel, gt_frames)
+  flat_gt_frames = jax.tree.map(jnp.ravel, gt_frames)
   flat_frames_mask = jnp.ravel(gt_frames_mask)
 
-  flat_gt_positions = jax.tree_map(jnp.ravel, gt_positions)
+  flat_gt_positions = jax.tree.map(jnp.ravel, gt_positions)
   flat_positions_mask = jnp.ravel(gt_mask)
 
   def _slice_last_layer_and_flatten(x):
       return jnp.reshape(x[-1], [-1])
 
-  flat_pred_frames = jax.tree_map(_slice_last_layer_and_flatten, pred_frames)
-  flat_pred_positions = jax.tree_map(_slice_last_layer_and_flatten,
+  flat_pred_frames = jax.tree.map(_slice_last_layer_and_flatten, pred_frames)
+  flat_pred_positions = jax.tree.map(_slice_last_layer_and_flatten,
                                      pred_positions)
   # FAPE Loss on sidechains
   fape = all_atom.frame_aligned_point_error(

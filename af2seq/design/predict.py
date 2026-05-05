@@ -41,7 +41,7 @@ class ProteinPredict(MCMCDesign):
 
     def plot_pred(self, nr: int = 0):
         p = py3Dmol.view(js="https://3dmol.org/build/3Dmol.js")
-        result0 = jax.tree_map(lambda x: x[nr], self.best_result["result"])
+        result0 = jax.tree.map(lambda x: x[nr], self.best_result["result"])
         if self.modeltype == "ptm":
             p.addModel(
                 protein.to_pdb(
@@ -65,7 +65,7 @@ class ProteinPredict(MCMCDesign):
         return p.show()
 
     def save(self, name, nr: int = 0):
-        result0 = jax.tree_map(lambda x: x[nr], self.best_result["result"])
+        result0 = jax.tree.map(lambda x: x[nr], self.best_result["result"])
         if self.modeltype == "ptm":
             pdb = protein.to_pdb(
                 protein.from_prediction(self.best_result["feat"], result0)
@@ -344,7 +344,7 @@ class ProteinPredict(MCMCDesign):
         if self.modeltype == "multimer":
             result, _ = result
 
-        result0 = jax.tree_map(lambda x: x[0], result)
+        result0 = jax.tree.map(lambda x: x[0], result)
 
         if self.modeltype == "ptm":
             self.pdbs.append(protein.to_pdb(protein.from_prediction(feat, result0)))
@@ -377,7 +377,7 @@ class ProteinPredict(MCMCDesign):
     def get_confidence_metrics(self, nr: int = 0):
         """Post processes prediction_result to get confidence metrics."""
 
-        prediction_result = jax.tree_map(lambda x: x[nr], self.best_result["result"])
+        prediction_result = jax.tree.map(lambda x: x[nr], self.best_result["result"])
         multimer_mode = self.modeltype == "multimer"
 
         confidence_metrics = {}
