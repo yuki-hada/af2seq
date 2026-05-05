@@ -45,12 +45,19 @@ def _maybe_get_size(array, axis):
     return array.shape[axis]
 
 
+def _flatten_axes(name, treedef, axis_tree):
+  """Replacement for removed jax.api_util.flatten_axes."""
+  if isinstance(axis_tree, (int, type(None))):
+    return [axis_tree] * treedef.num_leaves
+  return list(treedef.flatten_up_to(axis_tree))
+
+
 def _expand_axes(axes, values, name='sharded_apply'):
-  values_tree_def = jax.tree_flatten(values)[1]
-  flat_axes = jax.api_util.flatten_axes(name, values_tree_def, axes)
+  values_tree_def = jax.tree_util.tree_flatten(values)[1]
+  flat_axes = _flatten_axes(name, values_tree_def, axes)
   # Replace None's with PROXY
   flat_axes = [PROXY if x is None else x for x in flat_axes]
-  return jax.tree_unflatten(values_tree_def, flat_axes)
+  return jax.tree_util.tree_unflatten(values_tree_def, flat_axes)
 
 
 def sharded_map(
@@ -115,7 +122,7 @@ def sharded_apply(
   if shard_size is None:
     return fun
 
-  @jax.util.wraps(fun, docstr=docstr)
+  @functools.wraps(fun)
   def mapped_fn(*args):
     # Expand in axes and Determine Loop range
     in_axes_ = _expand_axes(in_axes, args)

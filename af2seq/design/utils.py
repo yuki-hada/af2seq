@@ -7,9 +7,9 @@ from tempfile import TemporaryDirectory
 
 import jax
 import tmscoring
-from simtk import unit
-from simtk.openmm import app as openmm_app
-from simtk.openmm.app.internal.pdbstructure import PdbStructure
+from openmm import unit
+from openmm import app as openmm_app
+from openmm.app.internal.pdbstructure import PdbStructure
 import io
 # from pymol import cmd
 from af2seq.alphafold.relax import cleanup
