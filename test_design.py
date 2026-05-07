@@ -2,7 +2,7 @@
 最小テスト: GradientDesign を XLA キャッシュ + メモリ制限付きで実行
 
 使い方:
-    /Users/yukihada/.venvs/af2seq-arm64/bin/python test_design.py
+    ~/.venvs/af2seq-arm64/bin/python test_design.py
 """
 
 import os

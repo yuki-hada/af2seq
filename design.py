@@ -3,25 +3,25 @@ af2seq gradient descent design pipeline
 
 Usage examples:
   # 基本実行（二次構造ベース初期化）
-  /Users/yukihada/.venvs/af2seq-arm64/bin/python design.py \
+  ~/.venvs/af2seq-arm64/bin/python design.py \
       --pdb input.pdb \
       --output results/
 
   # 固定残基あり（1-indexed、複数可）
-  /Users/yukihada/.venvs/af2seq-arm64/bin/python design.py \
+  ~/.venvs/af2seq-arm64/bin/python design.py \
       --pdb input.pdb \
       --output results/ \
       --fix_pos 1 5 10 23
 
   # 複数トラジェクトリ
-  /Users/yukihada/.venvs/af2seq-arm64/bin/python design.py \
+  ~/.venvs/af2seq-arm64/bin/python design.py \
       --pdb input.pdb \
       --output results/ \
       --trajectories 5 \
       --iterations 500
 
   # ランダムミューテーション率を変更（デフォルト10%）
-  /Users/yukihada/.venvs/af2seq-arm64/bin/python design.py \
+  ~/.venvs/af2seq-arm64/bin/python design.py \
       --pdb input.pdb \
       --output results/ \
       --mut_rate 0.15
